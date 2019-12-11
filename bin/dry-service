@@ -1,0 +1,107 @@
+#!/usr/bin/env ruby
+require "dry-service"
+require "thor"
+
+class DryServiceRunner < Thor
+  include Thor::Actions
+
+  BASE_DRY_FILE_NAME    = "base_dry_service.rb".freeze
+  CONFIG_FILE_NAME      = ".dry-service.yml".freeze
+  DEFAULT_BASE_DRY      = "base_dry".freeze
+  DEFAULT_DRY           = "dry".freeze
+  NAMED_DRY_FILE_NAME   = "named_service.rb".freeze
+
+  NOTE__NO_CUSTOM_CONF  = "No custom config found. Using `DryService` driectly.".freeze
+  NOTE__DEFAULT_BASE    = "No base service found. Using `DryService` driectly.".freeze
+  NOTE__CUSTOM_BASE     = "Custom base service found. Using `%s`.".freeze
+
+  class_option :base_service, aliases: "-b", type: :string
+  class_option :verbose,      aliases: "-v", type: :boolean, default: false
+
+  def self.source_root
+    File.join(__dir__, "..", "lib", "dry-service")
+  end
+
+  desc "setup", "Setup config file and a base service."
+  def setup
+    display_version
+    @base_service = options[:base_service].snakify || DEFAULT_BASE_DRY
+
+    template "templates/#{CONFIG_FILE_NAME}",   CONFIG_FILE_NAME
+    template "templates/#{BASE_DRY_FILE_NAME}", "app/services/#{base_service_filename}"
+  end
+
+  desc "new [SERVICE_NAME]", "Create a new named service in app/services."
+  def new(name)
+    display_version
+    display_log
+
+    service_filename  = name.servicify
+    @service_name     = service_filename.camelify
+    @parent_dry_class = base_service_class
+
+    template "templates/#{NAMED_DRY_FILE_NAME}", "app/services/#{service_filename}.rb"
+  end
+
+private
+
+  def verbose?
+    @verbose ||= options[:verbose]
+  end
+
+  def config_file_exists?
+    result = File.exist?(CONFIG_FILE_NAME)
+    result
+  end
+
+  def base_service
+    @base_service ||= (merged_options[:base_service] || DEFAULT_DRY.dup)
+  end
+
+  def base_service_class
+    @base_service_class ||= base_service.servicify.camelify
+  end
+
+  def base_service_filename
+    @base_service_filename ||= (base_service.servicify << ".rb")
+  end
+
+  def base_service_exists?
+    File.exist?("app/services/#{base_service_filename}")
+  end
+
+  def nondefault_base_service?
+    merged_options[:base_service] != DEFAULT_DRY
+  end
+
+  def merged_options
+    return @merged_options if @merged_options
+
+    @merged_options = if config_file_exists?
+                        YAML.load_file(CONFIG_FILE_NAME)
+                            .merge(options)
+                      else
+                        options
+                      end.symbolize_keys
+  end
+
+  def display_version
+    say("DryService version #{DryServiceGem::VERSION}.", :blue) if verbose?
+  end
+
+  def display_log
+    return unless verbose?
+
+    if config_file_exists?
+      if base_service_exists?
+        say(NOTE__CUSTOM_BASE.dup.gsub(/%s/, base_service_class), :green)
+      else
+        say(NOTE__DEFAULT_BASE, :yellow)
+      end
+    else
+      say(NOTE__NO_CUSTOM_CONF, :yellow)
+    end
+  end
+end
+
+DryServiceRunner.start(ARGV)
