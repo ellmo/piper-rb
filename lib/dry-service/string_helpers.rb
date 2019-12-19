@@ -6,12 +6,18 @@ class String
     snaked_self << "_service"
   end
 
-  def camelify
-    split("_").collect(&:capitalize).join
+  def camelify(classify = false)
+    if classify
+      capitalize
+        .gsub(%r{\/(\w)}) { "::" << Regexp.last_match(1).upcase }
+        .gsub(/_(\w)/)    { Regexp.last_match(1).upcase }
+    else
+      split("_").collect(&:capitalize).join
+    end
   end
 
   def snakify
-    gsub(/::/, "/")
+    gsub(/:{1,2}/, "/")
       .gsub(/([A-Z]+)([A-Z][a-z])/, "\\1_\\2")
       .gsub(/([a-z\d])([A-Z])/, "\\1_\\2")
       .tr("-", "_")

@@ -2,6 +2,8 @@
 require "dry-service"
 require "thor"
 
+require "yaml"
+
 class DryServiceRunner < Thor
   include Thor::Actions
 
@@ -25,7 +27,7 @@ class DryServiceRunner < Thor
   desc "setup", "Setup config file and a base service."
   def setup
     display_version
-    @base_service = options[:base_service].snakify || DEFAULT_BASE_DRY
+    @base_service = (options[:base_service] || DEFAULT_BASE_DRY).snakify
 
     template "templates/#{CONFIG_FILE_NAME}",   CONFIG_FILE_NAME
     template "templates/#{BASE_DRY_FILE_NAME}", "app/services/#{base_service_filename}"
@@ -37,7 +39,7 @@ class DryServiceRunner < Thor
     display_log
 
     service_filename  = name.servicify
-    @service_name     = service_filename.camelify
+    @service_name     = service_filename.camelify(true)
     @parent_dry_class = base_service_class
 
     template "templates/#{NAMED_DRY_FILE_NAME}", "app/services/#{service_filename}.rb"
