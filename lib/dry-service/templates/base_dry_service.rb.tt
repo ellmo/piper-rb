@@ -2,4 +2,10 @@
 
 class <%= base_service_class %> < DryService
 
+  def initialize(_)
+    raise NotImplementedError unless self.class < <%= base_service_class %>
+
+    super
+  end
+
 end

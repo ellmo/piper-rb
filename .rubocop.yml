@@ -31,9 +31,12 @@ Layout/SpaceAroundOperators:
   Enabled: false
 Layout/EmptyLinesAroundClassBody:
   Enabled: false
+Layout/AccessModifierIndentation:
+  Enabled: false
 
 # STYLE
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 Style/FrozenStringLiteralComment:
   Enabled: false
+  rubocop: warning

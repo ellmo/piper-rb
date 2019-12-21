@@ -35,12 +35,12 @@ class DryServiceRunner < Thor
 
   desc "new [SERVICE_NAME]", "Create a new named service in app/services."
   def new(name)
+    merged_options[:service_name] = name
+
     display_version
     display_log
 
-    service_filename  = name.servicify
-    @service_name     = service_filename.camelify(true)
-    @parent_dry_class = base_service_class
+    puts merged_options
 
     template "templates/#{NAMED_DRY_FILE_NAME}", "app/services/#{service_filename}.rb"
   end
@@ -52,8 +52,7 @@ private
   end
 
   def config_file_exists?
-    result = File.exist?(CONFIG_FILE_NAME)
-    result
+    File.exist?(CONFIG_FILE_NAME)
   end
 
   def base_service
@@ -61,11 +60,19 @@ private
   end
 
   def base_service_class
-    @base_service_class ||= base_service.servicify.camelify
+    @base_service_class ||= base_service.servicify.camelify(true)
   end
 
   def base_service_filename
     @base_service_filename ||= (base_service.servicify << ".rb")
+  end
+
+  def service_name
+    @service_name ||= merged_options[:service_name].servicify.camelify(true)
+  end
+
+  def service_filename
+    @service_filename ||= service_name.snakify.servicify
   end
 
   def base_service_exists?

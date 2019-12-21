@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class <%= @service_name %> < <%= base_service_class %>
+class <%= service_name %> < <%= base_service_class %>
   def call
     puts "This is #{self.class.name} reporting."
     super
