@@ -24,7 +24,7 @@ protected
 
     arr = klass.defined_service_steps.dup
 
-    result = self.class.instance_method(arr.shift).bind(self).call
+    result = method(arr.shift).call
     result = result.bind(method(arr.shift)) until arr.empty?
     result
   end

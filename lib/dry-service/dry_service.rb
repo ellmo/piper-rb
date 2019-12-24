@@ -6,8 +6,11 @@ require_relative "./dry_service_steps"
 
 class DryService < Dry::Struct
   include Dry::Monads[:result]
-  include Dry::Monads[:try]
   include DryServiceSteps
+
+  module Types
+    include Dry.Types()
+  end
 
   def initialize(_)
     raise NotImplementedError unless self.class < DryService
@@ -16,6 +19,8 @@ class DryService < Dry::Struct
   end
 
   def call
+    result = nil
+
     if defined? ActiveRecord::Base
       ActiveRecord::Base.transaction do
         result = bind_all_steps
@@ -23,14 +28,20 @@ class DryService < Dry::Struct
         raise ActiveRecord::Rollback if result.failure?
       end
     else
-      bind_all_steps
+      result = bind_all_steps
     end
+
+    result
   end
 
 protected
 
-  def _fail(obj, message)
-    { service: self, obj: obj, message: message }
+  def _fail(obj, message = nil)
+    Failure(service: self, obj: obj, message: message)
+  end
+
+  def _pass(obj)
+    Success(obj)
   end
 
 end
