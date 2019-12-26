@@ -13,12 +13,12 @@ class DryServiceRunner < Thor
   DEFAULT_DRY           = "dry".freeze
   NAMED_DRY_FILE_NAME   = "named_service.rb".freeze
 
-  NOTE__NO_CUSTOM_CONF  = "No custom config found. Using `DryService` driectly.".freeze
-  NOTE__DEFAULT_BASE    = "No base service found. Using `DryService` driectly.".freeze
+  NOTE__NO_CUSTOM_CONF  = "No custom config found. Using `DryService` directly.".freeze
+  NOTE__DEFAULT_BASE    = "No base service found. Using `DryService` directly.".freeze
   NOTE__CUSTOM_BASE     = "Custom base service found. Using `%s`.".freeze
 
   class_option :base_service, aliases: "-b", type: :string
-  class_option :verbose,      aliases: "-v", type: :boolean, default: false
+  class_option :verbose,      aliases: "-v", type: :boolean, default: true
 
   def self.source_root
     File.join(__dir__, "..", "lib", "dry-service")
@@ -39,8 +39,6 @@ class DryServiceRunner < Thor
 
     display_version
     display_log
-
-    puts merged_options
 
     template "templates/#{NAMED_DRY_FILE_NAME}", "app/services/#{service_filename}.rb"
   end
@@ -95,7 +93,7 @@ private
   end
 
   def display_version
-    say("DryService version #{DryServiceGem::VERSION}.", :blue) if verbose?
+    say("DryService version #{DryServiceGem::VERSION}", :blue) if verbose?
   end
 
   def display_log
