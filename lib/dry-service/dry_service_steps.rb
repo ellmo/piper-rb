@@ -17,8 +17,6 @@ module DryServiceSteps
 protected
 
   def bind_all_steps
-    # raise(NotImplementedError, "\#{method} not implemented in the base class; subclasses must implement this method!")
-
     klass = self.class
     return nil if klass.defined_service_steps.empty?
 
