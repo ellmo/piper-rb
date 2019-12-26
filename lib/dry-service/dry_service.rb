@@ -36,12 +36,24 @@ class DryService < Dry::Struct
 
 protected
 
-  def _fail(obj, message = nil)
-    Failure(service: self, obj: obj, message: message)
+  def pipe(description = nil)
+    raise ArgumentError, "missing block" unless block_given?
+
+    result        = yield
+    passed_object = @__result_object || result
+
+    if result
+      Success(passed_object || true)
+    else
+      Failure(service: self, obj: passed_object, message: @__error_message)
+    end
   end
 
-  def _pass(obj)
-    Success(obj)
+  def message(str)
+    @__error_message = str
   end
 
+  def object(obj)
+    @__result_object = obj
+  end
 end
