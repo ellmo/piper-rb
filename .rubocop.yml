@@ -33,6 +33,8 @@ Layout/EmptyLinesAroundClassBody:
   Enabled: false
 Layout/AccessModifierIndentation:
   Enabled: false
+Layout/HashAlignment:
+  Enabled: false
 
 # STYLE
 Style/StringLiterals:
@@ -40,3 +42,12 @@ Style/StringLiterals:
 Style/FrozenStringLiteralComment:
   Enabled: false
   rubocop: warning
+
+
+# RSPEC
+RSpec/ContextWording:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 5
