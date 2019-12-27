@@ -2,11 +2,11 @@ require "dry-monads"
 require "dry-struct"
 require "dry-types"
 
-require_relative "./dry_service_steps"
-require_relative "./dry_service_pipe"
+require_relative "./dsl/dry_service_steps"
+require_relative "./dsl/dry_service_pipe"
 
 class DryService < Dry::Struct
-  include DryServiceSteps
+  include DryServiceDSL::DryServiceSteps
 
   module Types
     include Dry.Types()
