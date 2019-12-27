@@ -45,7 +45,7 @@ protected
     if result
       Success(passed_object || true)
     else
-      Failure(service: self, obj: passed_object, message: @__error_message)
+      Failure(service: self, object: passed_object, message: @__error_message)
     end
   end
 
