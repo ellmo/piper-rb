@@ -23,22 +23,22 @@ class DryService < Dry::Struct
 
     if defined? ActiveRecord::Base
       ActiveRecord::Base.transaction do
-        result = bind_all_steps
+        result = perform_steps
 
         raise ActiveRecord::Rollback if result.failure?
       end
     else
-      result = bind_all_steps
+      result = perform_steps
     end
 
     result
   end
 
-protected
-
-  def pipe(desc = nil, &block)
+  def self.pipe(desc, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    DryServiceDSL::Pipe.new(self, attributes, desc, &block).call
+    pipepart = DryServiceDSL::Pipe.new(desc, &block)
+
+    service_steps << pipepart
   end
 end

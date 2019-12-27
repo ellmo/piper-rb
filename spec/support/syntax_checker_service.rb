@@ -1,21 +1,15 @@
 class SyntaxCheckerService < DryService
   attribute :input, Types::Strict::Integer
 
-  service_steps :asd, :qwe, :zxc
-
 protected
 
-  def asd
-    pipe do
-      input + 1
-    end
+  pipe :asd do
+    pass(:input, input + 1)
   end
 
-  def qwe(input)
-    pipe { input * -1 }
+  pipe :qwe do
+    pass(:input, input * -1)
   end
 
-  def zxc(input)
-    pipe { input.to_s }
-  end
+  pipe(:zxc) { input.to_s }
 end
