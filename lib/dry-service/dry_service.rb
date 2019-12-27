@@ -3,9 +3,9 @@ require "dry-struct"
 require "dry-types"
 
 require_relative "./dry_service_steps"
+require_relative "./dry_service_pipe"
 
 class DryService < Dry::Struct
-  include Dry::Monads[:result]
   include DryServiceSteps
 
   module Types
@@ -36,24 +36,9 @@ class DryService < Dry::Struct
 
 protected
 
-  def pipe(description = nil)
+  def pipe(desc = nil, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    result        = yield
-    passed_object = @__result_object || result
-
-    if result
-      Success(passed_object || true)
-    else
-      Failure(service: self, object: passed_object, message: @__error_message)
-    end
-  end
-
-  def message(str)
-    @__error_message = str
-  end
-
-  def object(obj)
-    @__result_object = obj
+    DryServiceDSL::Pipe.new(self, attributes, desc, &block).call
   end
 end
