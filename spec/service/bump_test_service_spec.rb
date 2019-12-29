@@ -1,4 +1,4 @@
-describe SyntaxCheckerService do
+describe BumpTestService do
   subject { service.call }
 
   let(:service) { described_class.new(params) }

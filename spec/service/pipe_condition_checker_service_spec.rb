@@ -9,7 +9,8 @@ describe PipeConditionCheckerService do
       {
         service:  service,
         object:   false,
-        message:  nil
+        message:  nil,
+        step:     :x_and_y_numeric?
       }
     end
 
@@ -29,7 +30,8 @@ describe PipeConditionCheckerService do
         {
           service:  service,
           object:   false,
-          message:  described_class::FAIL__X_MORE_THAN_Y
+          message:  described_class::FAIL__X_MORE_THAN_Y,
+          step:     :x_less_than_y?
         }
       end
 
@@ -49,7 +51,8 @@ describe PipeConditionCheckerService do
           {
             service:  service,
             object:   800,
-            message:  described_class::FAIL__NOT_THOUSAND
+            message:  described_class::FAIL__NOT_THOUSAND,
+            step:     :x_times_y_is_enough?
           }
         end
 

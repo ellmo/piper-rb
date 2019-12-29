@@ -2,11 +2,14 @@ require "dry-monads"
 require "dry-struct"
 require "dry-types"
 
-require_relative "./dry_service_steps"
+require_relative "./dsl/dry_service_helpers"
+require_relative "./dsl/dry_service_pipe"
+require_relative "./dsl/dry_service_steps"
 
 class DryService < Dry::Struct
+  include DryServiceDSL::DryServiceSteps
+  include DryServiceDSL::DryServiceHelpers
   include Dry::Monads[:result]
-  include DryServiceSteps
 
   module Types
     include Dry.Types()
@@ -23,37 +26,22 @@ class DryService < Dry::Struct
 
     if defined? ActiveRecord::Base
       ActiveRecord::Base.transaction do
-        result = bind_all_steps
+        result = perform_steps
 
         raise ActiveRecord::Rollback if result.failure?
       end
     else
-      result = bind_all_steps
+      result = perform_steps
     end
 
     result
   end
 
-protected
-
-  def pipe(description = nil)
+  def self.pipe(desc, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    result        = yield
-    passed_object = @__result_object || result
+    pipepart = DryServiceDSL::Pipe.new(desc, &block)
 
-    if result
-      Success(passed_object || true)
-    else
-      Failure(service: self, object: passed_object, message: @__error_message)
-    end
-  end
-
-  def message(str)
-    @__error_message = str
-  end
-
-  def object(obj)
-    @__result_object = obj
+    service_steps << pipepart
   end
 end
