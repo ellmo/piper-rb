@@ -12,17 +12,23 @@ module DryServiceDSL
       @block      = block
     end
 
-    def perform(service)
+    def perform(service, step_name)
       @service      = service
       @attr         = service.attributes
       @result       = instance_eval(&@block)
 
       result_object = @__result_object || result
+      condition     = @__condition || result
 
-      if result
+      if condition.is_a? Dry::Monads::Result
+        condition
+      elsif condition
         Success(result_object || true)
       else
-        Failure(service: service, object: result_object, message: @__error_message)
+        failure_object = { service: service, object: result_object, message: @__error_message }
+        failure_object[:step] = step_name if service.class.debug_steps?
+
+        Failure(failure_object)
       end
     end
 
@@ -36,7 +42,11 @@ module DryServiceDSL
       @__result_object = obj
     end
 
-    def pass(atr_name, val)
+    def cond(&block)
+      @__condition = instance_eval(&block)
+    end
+
+    def bump(atr_name, val)
       attr[atr_name] = val
       true
     end

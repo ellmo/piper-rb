@@ -1,4 +1,6 @@
 class PipeConditionCheckerService < DryService
+  debug_steps
+
   attribute :x, Types::Any
   attribute :y, Types::Any
 
