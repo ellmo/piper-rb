@@ -1,5 +1,4 @@
 class LastResultTestService < DryService
-
   attribute :input, Types::Any
 
   pipe "this step`s result should be passed to..." do
@@ -10,5 +9,4 @@ class LastResultTestService < DryService
     cond    { last_result == input * 30 }
     object  { last_result }
   end
-
 end
