@@ -12,9 +12,8 @@ describe LastResultTestService do
       expect(subject).to be_success
     end
 
-    it "returns `success`" do
+    it "returns value passed from previous step" do
       expect(value).to eq(integer * 30)
     end
-
   end
 end
