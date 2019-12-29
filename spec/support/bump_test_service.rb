@@ -1,4 +1,4 @@
-class SyntaxCheckerService < DryService
+class BumpTestService < DryService
   attribute :input, Types::Strict::Integer
 
   pipe :asd do

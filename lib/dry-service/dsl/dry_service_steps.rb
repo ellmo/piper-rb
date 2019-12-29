@@ -33,13 +33,13 @@ module DryServiceDSL
       arr     = klass.service_steps.dup
       step    = arr.shift
 
-      result  = step.perform(self, step.desc)
+      result  = step.perform(self)
       result  = result.bind(proc_step(arr.shift)) until arr.empty?
       result
     end
 
     def proc_step(step)
-      ->(_result) { step.perform(self, step.desc) }
+      ->(result) { step.perform(self, result) }
     end
   end
 end

@@ -1,22 +1,18 @@
 module DryServiceDSL
   class Pipe
-    include Dry::Monads[:result]
+    include ::Dry::Monads[:result]
 
-    attr_reader :service, :attr
-    attr_reader :desc, :result
-    alias description desc
-    alias attributes  attr
+    attr_reader :service
 
-    def initialize(desc, &block)
-      @desc       = desc
-      @block      = block
+    def initialize(description, &block)
+      @description  = description
+      @block        = block
     end
 
-    def perform(service, step_name)
-      @service      = service
-      @attr         = service.attributes
-      @result       = service.instance_eval(&@block)
+    def perform(service, last_result = nil)
+      service.last_result = last_result
 
+      result        = service.instance_eval(&@block)
       result_object = service.object  || result
       condition     = service.cond    || result
 
@@ -26,7 +22,7 @@ module DryServiceDSL
         Success(result_object || true)
       else
         failure_object = { service: service, object: result_object, message: service.message }
-        failure_object[:step] = step_name if service.class.debug_steps?
+        failure_object[:step] = @description if service.class.debug_steps?
 
         Failure(failure_object)
       end
