@@ -12,13 +12,15 @@ class PipeConditionCheckerService < DryService
   end
 
   pipe :x_less_than_y? do
-    message FAIL__X_MORE_THAN_Y
+    message { FAIL__X_MORE_THAN_Y }
     x < y
   end
 
   pipe :x_times_y_is_enough? do
-    message FAIL__NOT_THOUSAND
-    object(result = x * y)
-    result >= 1000
+    result = x * y
+
+    message { FAIL__NOT_THOUSAND }
+    object  { result }
+    cond    { result >= 1000 }
   end
 end

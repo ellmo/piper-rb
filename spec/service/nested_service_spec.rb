@@ -12,14 +12,14 @@ describe NestingService do
     end
 
     it "passes message from NestedService" do
-      expect(failure_object[:message]).to eq NestedService::FAIL__I_AM_THE_ONE_WHO_KNOCKS }
+      expect(failure_object[:message]).to eq NestedService::FAIL__I_AM_THE_ONE_WHO_KNOCKS
     end
 
     it "properly reports NestedService as the one returning result"  do
       expect(failure_object[:service]).to be_a NestedService
     end
 
-    it "yields `false` result object from NestedService"
+    it "yields `false` result object from NestedService" do
       expect(failure_object[:object]).to eq false
     end
   end

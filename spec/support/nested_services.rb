@@ -19,7 +19,7 @@ class NestedService < DryService
   FAIL__I_AM_THE_ONE_WHO_KNOCKS = "I am the one who knocks!".freeze
 
   pipe :simple_step do
-    message FAIL__I_AM_THE_ONE_WHO_KNOCKS
+    message { FAIL__I_AM_THE_ONE_WHO_KNOCKS }
     nested_input >= 300
   end
 
