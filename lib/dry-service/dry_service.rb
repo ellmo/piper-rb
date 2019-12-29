@@ -9,6 +9,7 @@ require_relative "./dsl/dry_service_steps"
 class DryService < Dry::Struct
   include DryServiceDSL::DryServiceSteps
   include DryServiceDSL::DryServiceHelpers
+  include Dry::Monads[:result]
 
   module Types
     include Dry.Types()
