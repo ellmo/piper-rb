@@ -11,7 +11,7 @@ _Not_ a part of [dry-rb][dryrb].
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dry-service'
+gem 'dry-service', git: 'https://github.com/ellmo/dry-service.git'
 ```
 
 ## Usage
