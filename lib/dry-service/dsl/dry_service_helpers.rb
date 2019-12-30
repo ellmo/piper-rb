@@ -22,12 +22,22 @@ module DryServiceDSL
     end
     alias result_object object
 
+    def fail_object
+      return @__fail_object unless block_given?
+
+      @__fail_object = yield
+    end
+
     def cond
       return @__condition unless block_given?
 
       @__condition = yield
     end
     alias condition cond
+
+    def condition_manual?
+      !defined?(@__condition).nil?
+    end
 
     def last_result=(val)
       @__last_result = val
