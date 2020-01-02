@@ -1,0 +1,35 @@
+require "rails_helper"
+
+describe <%= service_name %> do
+  subject { service.call }
+
+<%- if attributes.any? -%>
+  let(:service) { described_class.new(params) }
+
+  <%- if attributes.size > 1 -%>
+  let(:params) do
+    {
+    <%- attributes.map do |atr| -%>
+      <%= atr %>: "1",
+    <%- end -%>
+    }
+  end
+  <%- else -%>
+  let(:params) { { <%=attributes.first%>: "1" } }
+  <%- end -%>
+
+  context "NO arguments passed" do
+    subject { described_class.new }
+
+    it "Raises DryStruct`s argument error" do
+      expect { subject }.to raise_error(Dry::Struct::Error)
+    end
+  end
+
+  context "arguments passed" do
+    it "is a success" do
+      expect(subject).to be_success
+    end
+  end
+<%- end -%>
+end

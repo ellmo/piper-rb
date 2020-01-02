@@ -1,15 +1,18 @@
 #!/usr/bin/env ruby
 require "piper-rb"
 require "thor"
-
 require "yaml"
+
+require_relative "runner/test_helpers"
 
 class PiperRunner < Thor
   include Thor::Actions
+  include PiperRunnerHelpers::TestHelpers
 
   BASE_SERVICE_FILE_NAME  = "base_service.rb".freeze
   CONFIG_FILE_NAME        = ".piper.yml".freeze
   DEFAULT_BASE_SERVICE    = "base_service".freeze
+  DEFAULT_PIPER           = "piper".freeze
   NAMED_SERVICE_FILE_NAME = "named_service.rb".freeze
 
   NOTE__NO_CUSTOM_CONF    = "No custom config found. Using `PiperService` directly.".freeze
@@ -17,6 +20,7 @@ class PiperRunner < Thor
   NOTE__CUSTOM_BASE       = "Custom base service found. Using `%s`.".freeze
 
   class_option :base_service, aliases: "-b", type: :string
+  class_option :steps,        aliases: "-s", type: :numeric, default: 0
   class_option :verbose,      aliases: "-v", type: :boolean, default: true
 
   def self.source_root
@@ -33,16 +37,29 @@ class PiperRunner < Thor
   end
 
   desc "new [SERVICE_NAME]", "Create a new named service in app/services."
-  def new(name)
+  def new(name, *attrs)
     merged_options[:service_name] = name
+    merged_options[:attributes]   = attrs
 
     display_version
     display_log
 
     template "templates/#{NAMED_SERVICE_FILE_NAME}", "app/services/#{service_filename}.rb"
+
+    return unless defined?(Bundler)
+
+    build_spec_files || build_test_files
   end
 
 private
+
+  def attributes
+    @attributes ||= merged_options[:attributes]
+  end
+
+  def step_count
+    @step_count ||= merged_options[:steps]
+  end
 
   def verbose?
     @verbose ||= options[:verbose]
@@ -53,7 +70,7 @@ private
   end
 
   def base_service
-    @base_service ||= (merged_options[:base_service] || DEFAULT_DRY.dup)
+    @base_service ||= (merged_options[:base_service] || DEFAULT_PIPER.dup)
   end
 
   def base_service_class
@@ -77,7 +94,7 @@ private
   end
 
   def nondefault_base_service?
-    merged_options[:base_service] != DEFAULT_DRY
+    merged_options[:base_service] != DEFAULT_BASE_SERVICE
   end
 
   def merged_options
@@ -92,7 +109,7 @@ private
   end
 
   def display_version
-    say("Piper version #{PiperGem::VERSION}", :blue) if verbose?
+    say("Piper version #{PiperGem::VERSION}", [:white, :on_blue, :bold]) if verbose?
   end
 
   def display_log

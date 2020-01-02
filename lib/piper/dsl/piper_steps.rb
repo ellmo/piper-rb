@@ -28,7 +28,7 @@ module PiperDSL
     def perform_steps
       klass = self.class
 
-      return nil if klass.service_steps.empty?
+      return Success(true) if klass.service_steps.empty?
 
       arr     = klass.service_steps.dup
       step    = arr.shift

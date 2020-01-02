@@ -1,1 +1,2 @@
 base_service: <%= base_service %>
+verbose: true

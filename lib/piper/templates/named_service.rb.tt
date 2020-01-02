@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
 class <%= service_name %> < <%= base_service_class %>
-  def call
-    puts "This is #{self.class.name} reporting."
-    super
+<%- attributes.each do |attr| -%>
+  attribute :<%= attr %>, Types::Any
+<%- end -%>
+<%- step_count.times do |step_number| %>
+  pipe :step_<%= step_number + 1 %> do
+    true
   end
+<%- end -%>
 end
