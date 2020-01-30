@@ -1,6 +1,6 @@
 [dryrb]: https://dry-rb.org
 
-# dry-service
+# piper
 
 #### disclaimer
 _Not_ a part of [dry-rb][dryrb].
@@ -11,21 +11,21 @@ _Not_ a part of [dry-rb][dryrb].
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'dry-service', git: 'https://github.com/ellmo/dry-service.git'
+gem 'piper', git: 'https://github.com/ellmo/piper.git'
 ```
 
 ## Usage
 
 ### super basic
 
-The most basic element of the `DryService` is a `pipe`.
+The most basic element of the `Piper` is a `pipe`.
 Just think of it as a condition step. If no keywords are used, then (in accordance to Ruby
 conventions) the last line of code is taken as the step's condition:
 
 ```ruby
-require "dry-service"
+require "piper"
 
-class YourSuperbService < DryService
+class YourSuperbService < Piper
   attribute :input, Types::Any
 
   pipe "input is Numeric" do
@@ -64,9 +64,9 @@ keywords for this:
 
 
 ```ruby
-require "dry-service"
+require "piper"
 
-class YourFineService < DryService
+class YourFineService < Piper
   attribute :input, Types::Any
 
   pipe "input is Numeric" do
@@ -99,9 +99,9 @@ YourFineService.new(input: "asd").call
 ### you can access last step's object with `last_result`:
 
 ```ruby
-require "dry-service"
+require "piper"
 
-class YourGreatService < DryService
+class YourGreatService < Piper
   attribute :input, Types::Any
 
   pipe "this step`s result should be passed to..." do
@@ -121,9 +121,9 @@ YourGreatService.new(input: 20).call
 ### you can nest services, calling them in a pipe passes their result:
 
 ```ruby
-require "dry-service"
+require "piper"
 
-class YourMajesticService < DryService
+class YourMajesticService < Piper
   attribute :input, Types::Any
 
   pipe :nothing_to_see_here do
@@ -135,7 +135,7 @@ class YourMajesticService < DryService
   end
 end
 
-class YourFlamboyantService < DryService
+class YourFlamboyantService < Piper
   attribute :nested_input, Types::Any
 
   pipe :simple_step do

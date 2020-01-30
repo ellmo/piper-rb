@@ -1,36 +1,35 @@
 #!/usr/bin/env ruby
-require "dry-service"
+require "piper-rb"
 require "thor"
 
 require "yaml"
 
-class DryServiceRunner < Thor
+class PiperRunner < Thor
   include Thor::Actions
 
-  BASE_DRY_FILE_NAME    = "base_dry_service.rb".freeze
-  CONFIG_FILE_NAME      = ".dry-service.yml".freeze
-  DEFAULT_BASE_DRY      = "base_dry".freeze
-  DEFAULT_DRY           = "dry".freeze
-  NAMED_DRY_FILE_NAME   = "named_service.rb".freeze
+  BASE_SERVICE_FILE_NAME  = "base_service.rb".freeze
+  CONFIG_FILE_NAME        = ".piper.yml".freeze
+  DEFAULT_BASE_SERVICE    = "base_service".freeze
+  NAMED_SERVICE_FILE_NAME = "named_service.rb".freeze
 
-  NOTE__NO_CUSTOM_CONF  = "No custom config found. Using `DryService` directly.".freeze
-  NOTE__DEFAULT_BASE    = "No base service found. Using `DryService` directly.".freeze
-  NOTE__CUSTOM_BASE     = "Custom base service found. Using `%s`.".freeze
+  NOTE__NO_CUSTOM_CONF    = "No custom config found. Using `PiperService` directly.".freeze
+  NOTE__DEFAULT_BASE      = "No base service found. Using `PiperService` directly.".freeze
+  NOTE__CUSTOM_BASE       = "Custom base service found. Using `%s`.".freeze
 
   class_option :base_service, aliases: "-b", type: :string
   class_option :verbose,      aliases: "-v", type: :boolean, default: true
 
   def self.source_root
-    File.join(__dir__, "..", "lib", "dry-service")
+    File.join(__dir__, "..", "lib", "piper")
   end
 
   desc "setup", "Setup config file and a base service."
   def setup
     display_version
-    @base_service = (options[:base_service] || DEFAULT_BASE_DRY).snakify
+    @base_service = (options[:base_service] || DEFAULT_BASE_SERVICE).snakify
 
     template "templates/#{CONFIG_FILE_NAME}",   CONFIG_FILE_NAME
-    template "templates/#{BASE_DRY_FILE_NAME}", "app/services/#{base_service_filename}"
+    template "templates/#{BASE_SERVICE_FILE_NAME}", "app/services/#{base_service_filename}"
   end
 
   desc "new [SERVICE_NAME]", "Create a new named service in app/services."
@@ -40,7 +39,7 @@ class DryServiceRunner < Thor
     display_version
     display_log
 
-    template "templates/#{NAMED_DRY_FILE_NAME}", "app/services/#{service_filename}.rb"
+    template "templates/#{NAMED_SERVICE_FILE_NAME}", "app/services/#{service_filename}.rb"
   end
 
 private
@@ -93,7 +92,7 @@ private
   end
 
   def display_version
-    say("DryService version #{DryServiceGem::VERSION}", :blue) if verbose?
+    say("Piper version #{PiperGem::VERSION}", :blue) if verbose?
   end
 
   def display_log
@@ -111,4 +110,4 @@ private
   end
 end
 
-DryServiceRunner.start(ARGV)
+PiperRunner.start(ARGV)

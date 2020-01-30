@@ -1,5 +1,5 @@
-module DryServiceDSL
-  module DryServiceSteps
+module PiperDSL
+  module PiperSteps
 
     module ClassMethods
       def service_steps

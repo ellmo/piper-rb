@@ -1,4 +1,4 @@
-class BumpTestService < DryService
+class BumpTestService < PiperService
   attribute :input, Types::Strict::Integer
 
   pipe :asd do

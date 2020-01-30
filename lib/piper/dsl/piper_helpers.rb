@@ -1,5 +1,5 @@
-module DryServiceDSL
-  module DryServiceHelpers
+module PiperDSL
+  module PiperHelpers
     FAIL__NO_BLOCK = "Expected a block. None given.".freeze
 
     def bump(attribute)
@@ -14,26 +14,29 @@ module DryServiceDSL
       @__error_message = yield
     end
     alias fail_message message
+    alias mssg message
 
-    def object
+    def result_object
       return @__result_object unless block_given?
 
       @__result_object = yield
     end
-    alias result_object object
+    alias object result_object
+    alias rslt result_object
 
     def fail_object
       return @__fail_object unless block_given?
 
       @__fail_object = yield
     end
+    alias fobj fail_object
 
-    def cond
+    def condition
       return @__condition unless block_given?
 
       @__condition = yield
     end
-    alias condition cond
+    alias cond condition
 
     def condition_manual?
       !defined?(@__condition).nil?

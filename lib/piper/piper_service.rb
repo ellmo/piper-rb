@@ -2,13 +2,13 @@ require "dry-monads"
 require "dry-struct"
 require "dry-types"
 
-require_relative "./dsl/dry_service_helpers"
-require_relative "./dsl/dry_service_pipe"
-require_relative "./dsl/dry_service_steps"
+require_relative "./dsl/piper_helpers"
+require_relative "./dsl/piper_pipe"
+require_relative "./dsl/piper_steps"
 
-class DryService < Dry::Struct
-  include DryServiceDSL::DryServiceSteps
-  include DryServiceDSL::DryServiceHelpers
+class PiperService < Dry::Struct
+  include PiperDSL::PiperSteps
+  include PiperDSL::PiperHelpers
   include Dry::Monads[:result]
 
   module Types
@@ -16,7 +16,7 @@ class DryService < Dry::Struct
   end
 
   def initialize(_)
-    raise NotImplementedError unless self.class < DryService
+    raise NotImplementedError unless self.class < PiperService
 
     super
   end
@@ -40,7 +40,7 @@ class DryService < Dry::Struct
   def self.pipe(desc, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    pipepart = DryServiceDSL::Pipe.new(desc, &block)
+    pipepart = PiperDSL::Pipe.new(desc, &block)
 
     service_steps << pipepart
   end

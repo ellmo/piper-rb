@@ -1,4 +1,4 @@
-# module DryService
+# module Piper
 #   module RunnerHelpers
 #     def config_file_exists?
 #       File.exist?(CONFIG_FILE_NAME)
