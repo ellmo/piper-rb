@@ -1,4 +1,4 @@
-class PipeConditionCheckerService < DryService
+class PipeConditionCheckerService < PiperService
   debug_steps
 
   attribute :x, Types::Any
@@ -19,8 +19,8 @@ class PipeConditionCheckerService < DryService
   pipe :x_times_y_is_enough? do
     result = x * y
 
-    message { FAIL__NOT_THOUSAND }
-    object  { result }
-    cond    { result >= 1000 }
+    mssg { FAIL__NOT_THOUSAND }
+    rslt { result }
+    cond { result >= 1000 }
   end
 end

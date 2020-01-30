@@ -1,4 +1,4 @@
-class SeparateResultsService < DryService
+class SeparateResultsService < PiperService
   attribute :input, Types::Coercible::Float
 
   pipe :inline_spearate_results do

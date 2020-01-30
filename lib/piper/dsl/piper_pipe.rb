@@ -1,4 +1,4 @@
-module DryServiceDSL
+module PiperDSL
   class Pipe
     include ::Dry::Monads[:result]
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class <%= base_service_class %> < DryService
+class <%= base_service_class %> < PiperService
 
   def initialize(_)
     raise NotImplementedError unless self.class < <%= base_service_class %>

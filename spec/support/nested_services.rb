@@ -1,4 +1,4 @@
-class NestingService < DryService
+class NestingService < PiperService
   debug_steps
 
   attribute :input, Types::Any
@@ -12,7 +12,7 @@ class NestingService < DryService
   end
 end
 
-class NestedService < DryService
+class NestedService < PiperService
 
   attribute :nested_input, Types::Any
 

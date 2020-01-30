@@ -1,4 +1,4 @@
-class LastResultTestService < DryService
+class LastResultTestService < PiperService
   attribute :input, Types::Any
 
   pipe "this step`s result should be passed to..." do
