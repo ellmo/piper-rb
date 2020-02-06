@@ -31,5 +31,11 @@ describe <%= service_name %> do
       expect(subject).to be_success
     end
   end
+<%- else -%>
+  context "no arguments passed" do
+    it "is a success" do
+      expect(subject).to be_success
+    end
+  end
 <%- end -%>
 end
