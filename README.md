@@ -1,31 +1,25 @@
-[dryrb]: https://dry-rb.org
-
-# piper
-
-#### disclaimer
-_Not_ a part of [dry-rb][dryrb].
-
+# Piper.rb
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'piper', git: 'https://github.com/ellmo/piper.git'
+gem 'piper-rb', git: 'https://github.com/ellmo/piper-rb.git'
 ```
 
 ## Usage
 
 ### super basic
 
-The most basic element of the `Piper` is a `pipe`.
+The most basic element of `Piper` is a `pipe`.
 Just think of it as a condition step. If no keywords are used, then (in accordance to Ruby
 conventions) the last line of code is taken as the step's condition:
 
 ```ruby
-require "piper"
+require "piper-rb"
 
-class YourSuperbService < Piper
+class YourSuperbService < PiperService
   attribute :input, Types::Any
 
   pipe "input is Numeric" do
@@ -58,15 +52,15 @@ YourSuperbService.new(input: "asd").call
 If you want to specify the condition, object to be returned and the error message, there are
 keywords for this:
 
-* `cond`
-* `object`
-* `message`
+* `condition` (aliase: `cond`)
+* `result_object` (aliases: `object`, `rslt`)
+* `message` (aliases: `fail_message`, `mssg`)
 
 
 ```ruby
-require "piper"
+require "piper-rb"
 
-class YourFineService < Piper
+class YourFineService < PiperService
   attribute :input, Types::Any
 
   pipe "input is Numeric" do
@@ -99,9 +93,9 @@ YourFineService.new(input: "asd").call
 ### you can access last step's object with `last_result`:
 
 ```ruby
-require "piper"
+require "piper-rb"
 
-class YourGreatService < Piper
+class YourGreatService < PiperService
   attribute :input, Types::Any
 
   pipe "this step`s result should be passed to..." do
@@ -121,9 +115,9 @@ YourGreatService.new(input: 20).call
 ### you can nest services, calling them in a pipe passes their result:
 
 ```ruby
-require "piper"
+require "piper-rb"
 
-class YourMajesticService < Piper
+class YourMajesticService < PiperService
   attribute :input, Types::Any
 
   pipe :nothing_to_see_here do
@@ -135,7 +129,7 @@ class YourMajesticService < Piper
   end
 end
 
-class YourFlamboyantService < Piper
+class YourFlamboyantService < PiperService
   attribute :nested_input, Types::Any
 
   pipe :simple_step do
