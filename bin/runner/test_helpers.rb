@@ -1,5 +1,3 @@
-require "pry"
-
 module PiperRunnerHelpers
   module TestHelpers
     NAMED_SPEC_FILE         = "named_service_spec.rb".freeze
