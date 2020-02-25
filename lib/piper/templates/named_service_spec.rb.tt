@@ -32,6 +32,8 @@ describe <%= service_name %> do
     end
   end
 <%- else -%>
+  let(:service) { described_class.new }
+
   context "no arguments passed" do
     it "is a success" do
       expect(subject).to be_success
