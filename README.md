@@ -5,7 +5,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'piper-rb', git: 'https://github.com/ellmo/piper-rb.git'
+gem "piper-rb"
 ```
 
 ## Usage
