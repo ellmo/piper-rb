@@ -13,7 +13,7 @@ module PiperDSL
       end
 
       def pass_nil?
-        @__pass_nil || DEFAULT__PASS_NIL
+        @__pass_nil || super || DEFAULT__PASS_NIL
       end
 
       def pass_exception(val)
@@ -21,7 +21,7 @@ module PiperDSL
       end
 
       def pass_exception?
-        @__pass_exception || DEFAULT__PASS_EXCEPTION
+        @__pass_exception || super || DEFAULT__PASS_EXCEPTION
       end
 
       def debug_steps
