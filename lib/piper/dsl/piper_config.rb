@@ -13,7 +13,13 @@ module PiperDSL
       end
 
       def pass_nil?
-        @__pass_nil || super || DEFAULT__PASS_NIL
+        @__pass_nil ||= if defined?(@__pass_nil)
+                          @__pass_nil
+                        elsif superclass < PiperService
+                          superclass.pass_nil?
+                        else
+                          DEFAULT__PASS_NIL
+                        end
       end
 
       def pass_exception(val)
@@ -21,7 +27,13 @@ module PiperDSL
       end
 
       def pass_exception?
-        @__pass_exception || super || DEFAULT__PASS_EXCEPTION
+        @__pass_exception ||= if defined?(@__pass_exception)
+                                @__pass_exception
+                              elsif superclass < PiperService
+                                superclass.pass_exception?
+                              else
+                                DEFAULT__PASS_EXCEPTION
+                              end
       end
 
       def debug_steps

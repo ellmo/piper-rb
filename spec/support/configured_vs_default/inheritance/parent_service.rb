@@ -1,4 +1,4 @@
-class ConfiguredService < PiperService
+class ParentService < PiperService
   pass_nil       true
   pass_exception true
 
@@ -7,6 +7,6 @@ class ConfiguredService < PiperService
   end
 
   pipe "raise exception" do
-    raise StandardError, "Here's Johnny!"
+    raise StandardError, "Who's your daddy?"
   end
 end
