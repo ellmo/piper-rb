@@ -21,6 +21,8 @@ module PiperDSL
       return condition if condition.is_a? Dry::Monads::Result
 
       prepare_response!(condition)
+    rescue StandardError => e
+      pass_exception!(e)
     end
 
   protected
@@ -28,12 +30,20 @@ module PiperDSL
     def prepare_response!(condition)
       if condition
         Success(@result_object || true)
+      elsif condition.nil? && service.pass_nil?
+        Success(nil)
       else
         failure_object = { service: service, object: @fail_object, message: service.message }
         failure_object[:step] = @step_name if service.class.debug_steps?
 
         Failure(failure_object)
       end
+    end
+
+    def pass_exception!(exception)
+      raise exception unless service.pass_exception?
+
+      Failure(service: service, object: exception, message: exception.message)
     end
   end
 end

@@ -1,26 +1,13 @@
 module PiperDSL
   module PiperSteps
-
     module ClassMethods
       def service_steps
         @service_steps || @service_steps = []
-      end
-
-      def debug_steps
-        @__debug_steps = true
-      end
-
-      def debug_steps?
-        !@__debug_steps.nil?
       end
     end
 
     def self.included(base)
       base.extend(ClassMethods)
-    end
-
-    def debug_steps?
-      self.class.debug_steps?
     end
 
   protected
@@ -30,11 +17,11 @@ module PiperDSL
 
       return Success(true) if klass.service_steps.empty?
 
-      arr     = klass.service_steps.dup
-      step    = arr.shift
+      steps_array = klass.service_steps.dup
+      step        = steps_array.shift
 
       result  = step.perform(self)
-      result  = result.bind(proc_step(arr.shift)) until arr.empty?
+      result  = result.bind(proc_step(steps_array.shift)) until steps_array.empty?
       result
     end
 
