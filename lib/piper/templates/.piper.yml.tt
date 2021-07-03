@@ -1,2 +1,3 @@
 base_service: <%= base_service %>
 verbose: true
+pass_nil: false

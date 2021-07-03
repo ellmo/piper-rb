@@ -3,7 +3,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.6
 
 # METRICS
 MethodLength:
@@ -43,10 +43,11 @@ Style/FrozenStringLiteralComment:
   Enabled: false
   rubocop: warning
 
-
 # RSPEC
 RSpec/ContextWording:
   Enabled: false
+RSpec/MultipleExpectations:
+  Max: 5
 RSpec/NamedSubject:
   Enabled: false
 RSpec/NestedGroups:

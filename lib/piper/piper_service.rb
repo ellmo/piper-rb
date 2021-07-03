@@ -2,11 +2,13 @@ require "dry-monads"
 require "dry-struct"
 require "dry-types"
 
+require_relative "./dsl/piper_config"
+require_relative "./dsl/piper_steps"
 require_relative "./dsl/piper_helpers"
 require_relative "./dsl/piper_pipe"
-require_relative "./dsl/piper_steps"
 
 class PiperService < Dry::Struct
+  include PiperDSL::PiperConfig
   include PiperDSL::PiperSteps
   include PiperDSL::PiperHelpers
   include Dry::Monads[:result]

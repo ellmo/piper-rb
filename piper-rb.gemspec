@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
 
   spec.executables  = "piper"
 
-  spec.required_ruby_version = ">= 2.5.0"
+  spec.required_ruby_version = ">= 2.6.5"
 
   spec.add_dependency "dry-monads", "~> 1.3"
   spec.add_dependency "dry-struct", "~> 1.1"
@@ -31,4 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency "thor",       ">= 0.19", "<= 2.0"
 
   spec.add_development_dependency "rspec", "~> 3.9"
+  spec.add_development_dependency "rubocop", "~> 1.18"
+  spec.add_development_dependency "rubocop-performance", "~> 1.11"
+  spec.add_development_dependency "rubocop-rspec", "~> 2.4"
+  spec.add_development_dependency "pry", "~> 0.14"
 end
