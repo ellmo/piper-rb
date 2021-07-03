@@ -43,6 +43,10 @@ Style/FrozenStringLiteralComment:
   Enabled: false
   rubocop: warning
 
+# NAMING
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
 # RSPEC
 RSpec/ContextWording:
   Enabled: false
