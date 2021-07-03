@@ -109,7 +109,7 @@ private
   end
 
   def display_version
-    say("Piper version #{PiperGem::VERSION}", [:white, :on_blue, :bold]) if verbose?
+    say("Piper version #{PiperGem::VERSION}", %i[white on_blue bold]) if verbose?
   end
 
   def display_log
