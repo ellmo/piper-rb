@@ -10,7 +10,7 @@ gem "piper-rb"
 
 ## Usage
 
-### super basic
+### Super basic
 
 The most basic element of `Piper` is a `pipe`.
 Just think of it as a condition step. If no keywords are used, then (in accordance to Ruby
@@ -47,7 +47,7 @@ YourSuperbService.new(input: "asd").call
 
 ```
 
-### keywords for more control
+### Keywords for more control
 
 If you want to specify the condition, object to be returned and the error message, there are
 keywords for this:
@@ -90,7 +90,7 @@ YourFineService.new(input: "asd").call
 
 ```
 
-### you can access last step's object with `last_result`:
+### You can access last step's object with `last_result`:
 
 ```ruby
 require "piper-rb"
@@ -112,7 +112,7 @@ YourGreatService.new(input: 20).call
 #=> Success(600)
 ```
 
-### you can nest services, calling them in a pipe passes their result:
+### You can nest services, calling them in a pipe passes their result:
 
 ```ruby
 require "piper-rb"
@@ -144,4 +144,26 @@ YourMajesticService.new(input: 20).call
 
 YourMajesticService.new(input: 2).call
 #=> Failure({:service=>#<YourFlamboyantService nested_input=40>, :object=>false, :message=>"I am the one who knocks!"})
+```
+
+---
+
+### You can configure default `nil` behavior.
+
+By default, pipes fail when they end in `nil` and do not handle exceptions.
+You can, of course, explicitly return `true` in order to make sure a pipe is successful, even if it ended in `nil`.
+
+
+But in 0.4 you now have an option to tweak the default behavior, by using `pass_nil`. Bear in mind this option is inherited, so if your services inherit from, say, `BaseService`, then this - unless overwritten in a given service – will affect all services:
+
+Refer to [specs](https://github.com/ellmo/piper-rb/blob/master/spec/service/configured_service_spec.rb) for more info.
+
+```ruby
+require "piper-rb"
+
+class BaseService < PiperService
+  pass_nil true
+
+  # [...]
+end
 ```
