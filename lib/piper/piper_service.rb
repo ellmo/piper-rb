@@ -39,10 +39,10 @@ class PiperService < Dry::Struct
     result
   end
 
-  def self.pipe(desc, &block)
+  def self.pipe(desc, **options, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    pipepart = PiperDSL::Pipe.new(desc, &block)
+    pipepart = PiperDSL::Pipe.new(desc, options, &block)
 
     service_steps << pipepart
   end

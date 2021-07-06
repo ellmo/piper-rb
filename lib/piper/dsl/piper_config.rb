@@ -1,7 +1,7 @@
 module PiperDSL
   module PiperConfig
-    DEFAULT__PASS_NIL       = false
-    DEFAULT__PASS_EXCEPTION = false
+    DEFAULT__PASS_NIL         = false
+    DEFAULT__HANDLE_EXCEPTION = false
 
     def self.included(base)
       base.extend(ClassMethods)
@@ -22,18 +22,18 @@ module PiperDSL
                         end
       end
 
-      def pass_exception(val)
-        @__pass_exception = val
+      def handle_exception(val)
+        @__handle_exception = val
       end
 
-      def pass_exception?
-        @__pass_exception ||= if defined?(@__pass_exception)
-                                @__pass_exception
-                              elsif superclass < PiperService
-                                superclass.pass_exception?
-                              else
-                                DEFAULT__PASS_EXCEPTION
-                              end
+      def handle_exception?
+        @__handle_exception ||= if defined?(@__handle_exception)
+                                  @__handle_exception
+                                elsif superclass < PiperService
+                                  superclass.handle_exception?
+                                else
+                                  DEFAULT__HANDLE_EXCEPTION
+                                end
       end
 
       def skip_transaction!
@@ -57,8 +57,8 @@ module PiperDSL
       self.class.pass_nil?
     end
 
-    def pass_exception?
-      self.class.pass_exception?
+    def handle_exception?
+      self.class.handle_exception?
     end
 
     def skip_transaction?
