@@ -1,7 +1,7 @@
 require_relative "parent_service"
 
 class ProdigalDaughterService < ParentService
-  pass_exception false
+  handle_exception false
 
   pipe "return `nil`" do
     nil

@@ -1,6 +1,6 @@
 class ParentService < PiperService
-  pass_nil       true
-  pass_exception true
+  pass_nil         true
+  handle_exception true
 
   pipe "return `nil`" do
     nil
