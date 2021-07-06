@@ -26,7 +26,7 @@ class PiperService < Dry::Struct
   def call
     result = nil
 
-    if defined? ActiveRecord::Base
+    if defined?(ActiveRecord::Base) && !skip_transaction?
       ActiveRecord::Base.transaction do
         result = perform_steps
 

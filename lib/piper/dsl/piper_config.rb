@@ -36,6 +36,14 @@ module PiperDSL
                               end
       end
 
+      def skip_transaction!
+        @__skip_transaction = true
+      end
+
+      def skip_transaction?
+        !@__skip_transaction.nil?
+      end
+
       def debug_steps
         @__debug_steps = true
       end
@@ -51,6 +59,10 @@ module PiperDSL
 
     def pass_exception?
       self.class.pass_exception?
+    end
+
+    def skip_transaction?
+      self.class.skip_transaction?
     end
 
     def debug_steps?
