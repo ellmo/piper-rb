@@ -4,9 +4,11 @@ module PiperDSL
 
     attr_reader :service
 
-    def initialize(step_name, &block)
-      @step_name  = step_name
-      @block      = block
+    def initialize(step_name, **options, &block)
+      @step_name        = step_name
+      @block            = block
+      @pass_nil         = options[:pass_nil]
+      @handle_exception = options[:handle_exception]
     end
 
     def perform(service, last_result = nil)
@@ -30,7 +32,7 @@ module PiperDSL
     def prepare_response!(condition)
       if condition
         Success(@result_object || true)
-      elsif condition.nil? && service.pass_nil?
+      elsif condition.nil? && pass_nil?
         Success(nil)
       else
         failure_object = { service: service, object: @fail_object, message: service.message }
@@ -41,9 +43,17 @@ module PiperDSL
     end
 
     def pass_exception!(exception)
-      raise exception unless service.pass_exception?
+      raise exception unless handle_exception?
 
       Failure(service: service, object: exception, message: exception.message)
+    end
+
+    def pass_nil?
+      @pass_nil.nil? ? service.pass_nil? : @pass_nil
+    end
+
+    def handle_exception?
+      @handle_exception.nil? ? service.handle_exception? : @handle_exception
     end
   end
 end

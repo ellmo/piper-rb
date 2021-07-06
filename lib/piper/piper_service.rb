@@ -26,7 +26,7 @@ class PiperService < Dry::Struct
   def call
     result = nil
 
-    if defined? ActiveRecord::Base
+    if defined?(ActiveRecord::Base) && !skip_transaction?
       ActiveRecord::Base.transaction do
         result = perform_steps
 
@@ -39,10 +39,10 @@ class PiperService < Dry::Struct
     result
   end
 
-  def self.pipe(desc, &block)
+  def self.pipe(desc, **options, &block)
     raise ArgumentError, "missing block" unless block_given?
 
-    pipepart = PiperDSL::Pipe.new(desc, &block)
+    pipepart = PiperDSL::Pipe.new(desc, options, &block)
 
     service_steps << pipepart
   end

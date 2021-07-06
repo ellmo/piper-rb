@@ -1,3 +1,3 @@
 module PiperGem
-  VERSION = "0.4.0".freeze
+  VERSION = "0.4.3".freeze
 end
