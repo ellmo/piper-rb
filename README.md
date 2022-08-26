@@ -1,4 +1,6 @@
 # Piper.rb
+[[rubydocs](https://rubydoc.info/gems/piper-rb)]
+
 
 ## Installation
 
